@@ -31,6 +31,21 @@ COMMANDS = {
             b"^D01720230624121344;\x03\r",
         ],        
     },
+    "DAT": {
+        "name": "DAT",
+        "prefix": "^S018",
+        "description": "Set current datetime",
+        "help": " -- set the current datetime, format is DATYYMMDDhhmmss (YY-year, MM-month, DD-day, hh-hour, mm-minute, ss-second) \n",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],   
+        "regex": "DAT([0-9]{12})$",     
+    },
     "ET": {
         "name": "ET",
         "prefix": "^P005",
