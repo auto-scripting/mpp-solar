@@ -1,5 +1,6 @@
 # import importlib
 import logging
+import datetime
 from abc import ABC
 
 from mppsolar.version import __version__  # noqa: F401
@@ -121,6 +122,13 @@ class AbstractDevice(ABC):
         # Run all the commands that are defined as status from the protocol definition
         data = {}
         for command in self._protocol.STATUS_COMMANDS:
+            if (command == "EY"):
+                command = "EY" + str(datetime.datetime.now().strftime("%Y"))
+            elif (command == "EM"):
+                command = "EM" + str(datetime.datetime.now().strftime("%Y%m"))
+            elif (command == "ED"):
+                command = "ED" + str(datetime.datetime.now().strftime("%Y%m%d"))
+
             data.update(self.run_command(command))
         return data
 
