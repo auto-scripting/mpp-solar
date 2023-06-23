@@ -341,9 +341,13 @@ COMMANDS = {
             ["int", "Max. charging current value 6", "A"],
             ["int", "Max. charging current value 7", "A"],
             ["int", "Max. charging current value 8", "A"],
+            ["int", "Max. charging current value 9", "A"],
+            ["int", "Max. charging current value 10", "A"],
+            ["int", "Max. charging current value 11", "A"],
+            ["int", "Max. charging current value 12", "A"]
         ],
         "test_responses": [
-            b"^D034010,020,030,040,050,060,070,080\x161\r",
+            b"^D034010,020,030,040,050,060,070,080,090,100,110,120\x161\r",
         ],
     },
     "MUCHGCR": {
@@ -361,7 +365,7 @@ COMMANDS = {
             ["int", "Max. AC charging current value 6", "A"],
             ["int", "Max. AC charging current value 7", "A"],
             ["int", "Max. AC charging current value 8", "A"],
-            ["int", "Max. AC charging current value 9", "A"],
+            ["int", "Max. AC charging current value 9", "A"],            
         ],
         "test_responses": [
             b"",
@@ -460,7 +464,7 @@ COMMANDS = {
         "name": "MCHGC",
         "prefix": "^S013",
         "description": "Set Battery Max Charging Current Solar + AC 		(Manual Option 11)",
-        "help": " -- example: MCHGC0,030 	(set unit 0 [0-9] to max charging current of  30A [    010 020 030 040 050 060 070 080])",
+        "help": " -- example: MCHGC0,030 	(set unit 0 [0-9] to max charging current of  30A [    010 020 030 040 050 060 070 080 090 100 110 120])",
         "type": "SETTER",
         "response": [
             ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
@@ -469,7 +473,7 @@ COMMANDS = {
             b"(NAK\x73\x73\r",
             b"(ACK\x39\x20\r",
         ],
-        "regex": "MCHGC([0-9],0[1-8]0)$",
+        "regex": "MCHGC([0-9],[0-1][0-9]0)$",
     },
     "MUCHGC": {
         "name": "MUCHGC",
