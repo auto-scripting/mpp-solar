@@ -20,12 +20,17 @@ COMMANDS = {
             b"^D00518;\x03\r",
         ],
     },
-    #    "T": {
-    #        "name": "T",
-    #        "prefix": "^P004",
-    #        "description": "Queryy current time",
-    #        "help": " -- queries the device protocol version \n",
-    #    },
+    "T": {
+        "name": "T",
+        "prefix": "^P004",
+        "description": "Query current time",
+        "help": " -- queries the device current time \n",
+        "type": "QUERY",
+        "response": [["string", "Current time", "datetime"]],
+        "test_responses": [
+            b"^D01720230624121344;\x03\r",
+        ],        
+    },
     "ET": {
         "name": "ET",
         "prefix": "^P005",
