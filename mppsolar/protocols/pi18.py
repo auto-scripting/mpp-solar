@@ -46,6 +46,37 @@ COMMANDS = {
         ],   
         "regex": "DAT([0-9]{12})$",     
     },
+    "ACCT": {
+        "name": "ACCT",
+        "prefix": "^S014",
+        "description": "Set AC charge time bucket",
+        "help": " -- Set AC charge time bucket, format is ACCThhmm,hhmm (start/ending time: hh-hour, mm-minute) \n",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],   
+        "regex": "ACCT([0-9]{4}),([0-9]{4})$",     
+    },
+    "ACLT": {
+        "name": "ACLT",
+        "prefix": "^S014",
+        "description": "Set AC supply load time bucket",
+        "help": " -- Set AC supply load time bucket, format is ACLThhmm,hhmm (start/ending time: hh-hour, mm-minute) \n",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],   
+        "regex": "ACLT([0-9]{4}),([0-9]{4})$",     
+    },
+
     "ET": {
         "name": "ET",
         "prefix": "^P005",
@@ -548,26 +579,27 @@ COMMANDS = {
     },
 
     # SETTER ###
-    #    "LON": {
-    #        "name": "LON",
-    #        "prefix": "^S007",
-    #        "description": "Set enable/disable machine supply power to the loads",
-    #        "help": " -- example: LON1 (0: disable, 1: enable)",
-    #        "type": "SETTER",
-    #        "response": [
-    #            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
-    #        ],
-    #        "test_responses": [
-    #            b"^1\x0b\xc2\r",
-    #            b"^0\x1b\xe3\r",
-    #        ],
-    #        "regex": "LON([01])$",
-    #    },
+    "LON": {
+        "name": "LON",
+        "prefix": "^S007",
+        "description": "Set enable/disable machine supply power to the loads",
+        "help": " -- example: LON1 (0: disable, 1: enable)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+        "regex": "LON([01])$",
+    },
+
     "POP": {
         "name": "POP",
         "prefix": "^S007",
         "description": "Set output souce priority 				(Manual Option 01)",
-        "help": " -- example: POP0 		(set Output POP0 [0: Solar-Utility-Batter],  POP1 [1: Solar-Battery-Utility]",
+        "help": " -- example: POP0 		(set Output POP0 [0: Solar-Utility-Battery],  POP1 [1: Solar-Battery-Utility]",
         "type": "SETTER",
         "response": [
             ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
@@ -578,6 +610,23 @@ COMMANDS = {
         ],
         "regex": "POP([01])$",
     },
+    "POPM": {
+        "name": "POPM",
+        "prefix": "^S010",
+        "description": "Set output model",
+        "help": " -- example: POPM<Parallel machine ID>,<Output model> 		(Set output model POPM0,0 [0: Single module],  POPM0,1 [1: parallel output], POPM0,2 [2: Phase 1 of three phaseoutput], POPM0,3 [3: Phase 2 of three phase output], POPM0,4 [4: Phase 3 of three phase output]",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+        "regex": "POP([0-9][0-4])$",
+    },
+
+
     "PSP": {
         "name": "PSP",
         "prefix": "^S007",
@@ -593,11 +642,27 @@ COMMANDS = {
         ],
         "regex": "PSP([01])$",
     },
-    "PEI": {
-        "name": "PEI",
+    "PGR": {
+        "name": "PGR",
+        "prefix": "^S007",
+        "description": "Set AC input voltage range",
+        "help": " -- example: PGR0 		(Set AC input voltage range PGR0 [0: Appliance,  PGR1 [1: UPS]",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+        "regex": "PGR([01])$",
+    },
+
+    "PEA": {
+        "name": "PEA",
         "prefix": "^S006",
-        "description": "Set Machine type,  enable: Grid-Tie 			(Manual Option 09)",
-        "help": " -- example: PEI 		(set enable Grid-Tie)",
+        "description": "open buzzer",
+        "help": " -- example: PEA 		(open buzzer)",
         "type": "SETTER",
         "response": [
             ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
@@ -607,6 +672,224 @@ COMMANDS = {
             b"^0\x1b\xe3\r",
         ],
     },
+    "PDA": {
+        "name": "PDA",
+        "prefix": "^S006",
+        "description": "Silence buzzer",
+        "help": " -- example: PDA 		(Silence buzzer)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+
+    "PEB": {
+        "name": "PEB",
+        "prefix": "^S006",
+        "description": "Enable Overload bypass function",
+        "help": " -- example: PEB 		(Enable Overload bypass function)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+    "PDB": {
+        "name": "PDB",
+        "prefix": "^S006",
+        "description": "Disable Overload bypass function",
+        "help": " -- example: PDB 		(Disable Overload bypass function)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+
+    "PEC": {
+        "name": "PEC",
+        "prefix": "^S006",
+        "description": "Enable LCD display escape to default page after 1min timeout",
+        "help": " -- example: PEC 		(Enable LCD display escape to default page after 1min timeout)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+    "PDC": {
+        "name": "PDC",
+        "prefix": "^S006",
+        "description": "Disable LCD display escape to default page after 1min timeout",
+        "help": " -- example: PDC 		(Disable LCD display escape to default page after 1min timeout)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+
+    "PED": {
+        "name": "PED",
+        "prefix": "^S006",
+        "description": "Enable Overload restart",
+        "help": " -- example: PED 		(Enable Overload restart)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+    "PDD": {
+        "name": "PDD",
+        "prefix": "^S006",
+        "description": "Disable Overload restart",
+        "help": " -- example: PDD 		(Disable Overload restart)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+
+    "PEE": {
+        "name": "PEE",
+        "prefix": "^S006",
+        "description": "Enable Over temperature restart",
+        "help": " -- example: PEE 		(Enable Over temperature restart)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+    "PDE": {
+        "name": "PDE",
+        "prefix": "^S006",
+        "description": "Disable Over temperature restart",
+        "help": " -- example: PDE 		(Disable Over temperature restart)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+
+    "PEF": {
+        "name": "PEF",
+        "prefix": "^S006",
+        "description": "Enable Backlight on",
+        "help": " -- example: PEF 		(Enable Backlight on)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+    "PDF": {
+        "name": "PDF",
+        "prefix": "^S006",
+        "description": "Disable Backlight on",
+        "help": " -- example: PDF 		(Disable Backlight on)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+
+    "PEG": {
+        "name": "PEG",
+        "prefix": "^S006",
+        "description": "Enable Alarm on when primary source interrupt",
+        "help": " -- example: PEG 		(Enable Alarm on when primary source interrupt)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+    "PDG": {
+        "name": "PDG",
+        "prefix": "^S006",
+        "description": "Disable Alarm on when primary source interrupt",
+        "help": " -- example: PDG 		(Disable Alarm on when primary source interrupt)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+
+    "PEH": {
+        "name": "PEH",
+        "prefix": "^S006",
+        "description": "Enable Fault code record",
+        "help": " -- example: PEH 		(Enable Fault code record)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+    "PDH": {
+        "name": "PDH",
+        "prefix": "^S006",
+        "description": "Disable Fault code record",
+        "help": " -- example: PDH 		(Disable Fault code record)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+
     "PDI": {
         "name": "PDI",
         "prefix": "^S006",
@@ -621,6 +904,36 @@ COMMANDS = {
             b"^0\x1b\xe3\r",
         ],
     },
+    "PEI": {
+        "name": "PEI",
+        "prefix": "^S006",
+        "description": "Set Machine type,  enable: Grid-Tie 			(Manual Option 09)",
+        "help": " -- example: PEI 		(set enable Grid-Tie)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+
+    "PF": {
+        "name": "PF",
+        "prefix": "^S006",
+        "description": "Set changeable parameter restore to default value",
+        "help": " -- example: PF 		(Set changeable parameter restore to default value)",
+        "type": "SETTER",
+        "response": [
+            ["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}],
+        ],
+        "test_responses": [
+            b"^1\x0b\xc2\r",
+            b"^0\x1b\xe3\r",
+        ],
+    },
+
     "PCP": {
         "name": "PCP",
         "prefix": "^S009",
@@ -663,6 +976,58 @@ COMMANDS = {
         ],
         "regex": "MUCHGC([0-9]),(002|0[1-8]0)$",
     },
+    "F50": {
+        "name": "F50",
+        "prefix": "^S006",
+        "description": "Set AC output frequency to be 50Hz",
+        "help": " -- example: F50 		(Set AC output frequency to be 50Hz)",
+        "type": "SETTER",
+        "response": [["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}]],
+        "test_responses": [
+            b"(NAK\x73\x73\r",
+            b"(ACK\x39\x20\r",
+        ],
+    },
+    "F60": {
+        "name": "F60",
+        "prefix": "^S006",
+        "description": "Set AC output frequency to be 60Hz",
+        "help": " -- example: F60 		(Set AC output frequency to be 60Hz)",
+        "type": "SETTER",
+        "response": [["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}]],
+        "test_responses": [
+            b"(NAK\x73\x73\r",
+            b"(ACK\x39\x20\r",
+        ],
+    },
+    "CLE": {
+        "name": "F60",
+        "prefix": "^S006",
+        "description": "Clear the all the data of generated energy",
+        "help": " -- example: CLE 		(Clear the all the data of generated energy)",
+        "type": "SETTER",
+        "response": [["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}]],
+        "test_responses": [
+            b"(NAK\x73\x73\r",
+            b"(ACK\x39\x20\r",
+        ],
+    },
+
+
+    "V": {
+        "name": "V",
+        "prefix": "^008",
+        "description": "Set AC output rated voltage",
+        "help": " -- example: F60 		(Set AC output rated voltage)",
+        "type": "SETTER",
+        "response": [["ack", "Command execution", {"NAK": "Failed", "ACK": "Successful"}]],
+        "test_responses": [
+            b"(NAK\x73\x73\r",
+            b"(ACK\x39\x20\r",
+        ],
+        "regex": "V([12][0-9][0-9])$",
+    },
+
     "PBT": {
         "name": "PBT",
         "prefix": "^S007",
