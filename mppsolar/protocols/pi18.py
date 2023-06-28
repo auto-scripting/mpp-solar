@@ -299,20 +299,36 @@ COMMANDS = {
             b"",
         ],
     },
-    #    "FWS": {
-    #        "name": "FWS",
-    #        "prefix": "^P005",
-    #        "description": "fault and warning status",
-    #        "help": " -- Query fault and warning status",
-    #        "type": "QUERY",
-    #        "response": [
-    #            [
-    #            ]
-    #        ],
-    #        "test_responses": [
-    #            b"",
-    #        ],
-    #    },
+    "FWS": {
+        "name": "FWS",
+        "prefix": "^P005",
+        "description": "fault and warning status",
+        "help": " -- Query fault and warning status",
+        "type": "QUERY",
+        "response": [
+            ["int", "Fault code", ""],
+            ["int", "Line fail", ""],
+            ["int", "Output circuit short", ""],
+            ["int", "Inverter over temperature", ""],
+            ["int", "Fan lock", ""],
+            ["int", "Battery voltage high", ""],
+            ["int", "Battery low", ""],
+            ["int", "Battery under", ""],
+            ["int", "Over load", ""],
+            ["int", "Eeprom fail", ""],
+            ["int", "Power limit", ""],
+            ["int", "PV1 voltage high", ""],
+            ["int", "PV2 voltage high", ""],
+            ["int", "MPPT1 overload warning", ""],
+            ["int", "MPPT2 overload warning", ""],
+            ["int", "Battery too low to charge for SCC1", ""],
+            ["int", "Battery too low to charge for SCC2", ""],
+            ["int", "unknown", ""],
+        ],
+        "test_responses": [
+            b"",
+        ],
+    },
     "FLAG": {
         "name": "FLAG",
         "prefix": "^P007",
@@ -334,18 +350,53 @@ COMMANDS = {
             b"",
         ],
     },
-    #    "DI": {
-    #        "name": "DI",
-    #        "prefix": "^P005",
-    #        "description": "Query default value of changeable paramer",
-    #        "help": " -- Query default value of changeable paramer",
-    #        "type": "QUERY",
-    #        "response": [
-    #        ],
-    #        "test_responses": [
-    #            b"",
-    #        ],
-    #    },
+    "DI": {
+        "name": "DI",
+        "prefix": "^P005",
+        "description": "Query default value of changeable paramer",
+        "help": " -- Query default value of changeable paramer",
+        "type": "QUERY",
+        "response": [
+            ["10int", "AC output voltage", "V", {"icon": "mdi:home-lightning-bolt-outline", "device-class": "voltage"}],
+            ["10int", "AC output frequency", "Hz", {"icon": "mdi:sine-wave", "device-class": "frequency"}],
+            ["option", "AC input voltage range", ["Appliance", "UPS"]],
+            ["10int", "Battery under voltage", "V", {"icon": "mdi:battery-outline", "device-class": "voltage"}],
+            ["10int", "Charging float voltage", "V", {"icon": "mdi:battery-outline", "device-class": "voltage"}],
+            ["10int", "Charging bulk voltage", "V", {"icon": "mdi:battery-outline", "device-class": "voltage"}],
+            ["10int", "Battery default re-charge voltage", "V", {"icon": "mdi:battery-outline", "device-class": "voltage"}],
+            ["10int", "Battery re-discharge voltage", "V", {"icon": "mdi:battery-outline", "device-class": "voltage"}],
+            ["int", "Max charging current", "A", {"icon": "mdi:current-dc", "device-class": "current"}],
+            ["int", "Max AC charging current", "A", {"icon": "mdi:current-dc", "device-class": "current"}],
+            ["option", "Battery type", ["AGM", "Flooded", "User"]],
+            ["option", "Output source priority", ["Solar-Utility-Battery", "Solar-Battery-Utility"]],
+            ["option", "Charger source priority", ["Solar First", "Solar and Utility", "Only Solar"]],
+            ["option", "Solar power priority", ["Battery-Load-Utility", "Load-Battery-Utility"]],
+            ["option", "Machine type", ["Off-Grid", "Grid-Tie"]],
+            ["option", "Topology", ["transformerless", "ransformer"]],
+            [
+                "option",
+                "Output model setting",
+                [
+                    "Single module",
+                    "parallel output",
+                    "Phase 1 of three phase output",
+                    "Phase 2 of three phase output",
+                    "Phase 3 of three phase output",
+                ],
+            ],
+            ["option", "Enable/disable silence buzzer or open buzzer", ["disable", "enable"]],
+            ["option", "Enable/Disable overload restart", ["disable", "enable"]],
+            ["option", "Enable/Disable over temperature restart", ["disable", "enable"]],
+            ["option", "Enable/Disable LCD backlight on", ["disable", "enable"]],
+            ["option", "Enable/Disable alarm on when primary source interrupt", ["disable", "enable"]],
+            ["option", "Enable/Disable fault code record", ["disable", "enable"]],
+            ["option", "Enable/Disable overload bypass", ["disable", "enable"]],
+            ["option", "Enable/Disable LCD display escape to default page after 1mintimeout", ["disable", "enable"]]
+        ],
+        "test_responses": [
+            b"",
+        ],
+    },
     "MCHGCR": {
         "name": "MCHGCR",
         "prefix": "^P009",
@@ -391,6 +442,111 @@ COMMANDS = {
             b"",
         ],
     },
+
+    "PRI": {
+        "name": "PRI",
+        "prefix": "^P007",
+        "description": "Query different rated information of parallel system",
+        "help": " -- Query different rated information of parallel system, , format is PRI<n> ",
+        "type": "QUERY",
+        "response": [
+            ["option", "Parallel ID connection status", ["Not existent", "existent"]],
+            ["int", "Serial Number valid length", ""],
+            ["int", "Serial Number", ""],
+            ["option", "Charging source priority", ["Solar first", "Solar and Utility", "Only solar"]],
+            ["int", "Max. charging current", "A"],
+            ["int", "Max. AC charging current", "A"],
+            ["option", "Output model setting", ["Single module", "parallel output", "Phase 1 of three phaseoutput", "Phase 2 of three phase output", "Phase 3 of three phase"]]
+        ],
+        "regex": "PRI(\\d)$",
+        "test_responses": [
+            b"",
+        ],
+    },
+    "PGS": {
+        "name": "PGS",
+        "prefix": "^P007",
+        "description": "Query general status of parallel system",
+        "help": " -- Query different rated information of parallel system, , format is PRI<n> ",
+        "type": "QUERY",
+        "response": [
+            ["option", "Parallel ID connection status", ["Not existent", "existent"]],
+            ["int", "Work mode", ""],
+            ["int", "Fault code", ""],
+            ["10int", "Grid voltage", "V", {"icon": "mdi:home-lightning-bolt-outline", "device-class": "voltage"}],
+            ["10int", "Grid frequency", "Hz", {"icon": "mdi:sine-wave", "device-class": "frequency"}],
+            ["10int", "AC output voltage", "V", {"icon": "mdi:home-lightning-bolt-outline", "device-class": "voltage"}],
+            ["10int", "AC output frequency", "Hz", {"icon": "mdi:sine-wave", "device-class": "frequency"}],
+            ["int", "AC output apparent power", "VA", {"icon": "mdi:power-plug", "device-class": "apparent_power"}],
+            ["int", "AC output active power", "W", {"icon": "mdi:power-plug", "device-class": "power"}],
+            ["int", "Total AC output apparent power", "VA", {"icon": "mdi:power-plug", "device-class": "apparent_power"}],
+            ["int", "Total AC output active power", "W", {"icon": "mdi:power-plug", "device-class": "power"}],
+            ["int", "Output load percent", "%", {"icon": "mdi:brightness-percent"}],
+            ["int", "Total output load percent", "%", {"icon": "mdi:brightness-percent"}],
+            ["10int", "Battery voltage", "V", {"icon": "mdi:battery-outline", "device-class": "voltage"}],
+            ["int", "Battery discharge current", "A", {"icon": "mdi:current-dc", "device-class": "current"}],
+            ["int", "Battery charging current", "A", {"icon": "mdi:current-dc", "device-class": "current"}],
+            ["int", "Total battery charging current", "A", {"icon": "mdi:current-dc", "device-class": "current"}],
+            ["int", "Battery capacity", "%", {"icon": "mdi:brightness-percent"}],
+            ["int", "PV1 Input power", "W", {"icon": "mdi:solar-power", "device-class": "power"}],
+            ["int", "PV2 Input power", "W", {"icon": "mdi:solar-power", "device-class": "power"}],
+            ["10int", "PV1 Input voltage", "V", {"icon": "mdi:solar-power", "device-class": "voltage"}],
+            ["10int", "PV2 Input voltage", "V", {"icon": "mdi:solar-power", "device-class": "voltage"}],
+            [
+                "option",
+                "MPPT1 charger status",
+                ["abnormal", "normal but not charged", "charging"],
+            ],
+            [
+                "option",
+                "MPPT2 charger status",
+                ["abnormal", "normal but not charged", "charging"],
+            ],
+            ["option", "Load connection", ["disconnect", "connect"]],
+            ["option", "Battery power direction", ["donothing", "charge", "discharge"]],
+            ["option", "DC/AC power direction", ["donothing", "AC-DC", "DC-AC"]],
+            ["option", "Line power direction", ["donothing", "input", "output"]],
+            [
+                "int",
+                "Max Temperature",
+                "°C",
+                {"icon": "mdi:thermometer", "device-class": "temperature"},
+            ]
+        ],
+        "regex": "PGS(\\d)$",
+        "test_responses": [
+            b"",
+        ],
+    },
+    "ACCT": {
+        "name": "ACCT",
+        "prefix": "^P005",
+        "description": "Query AC charge time bucket",
+        "help": " -- Query AC charge time bucket, format is ACCT",
+        "type": "QUERY",
+        "response": [
+            ["string", "Start time for enable AC charger working", "HHMM"],
+            ["string", "Ending time for enable AC charger working", "HHMM"]
+        ],
+        "test_responses": [
+            b"",
+        ],
+    },
+    "ACLT": {
+        "name": "ACLT",
+        "prefix": "^P005",
+        "description": "Query AC supply load time bucket",
+        "help": " -- Query AC supply load time bucket, format is ACLT",
+        "type": "QUERY",
+        "response": [
+            ["string", "Start time for enable AC supply the load", "HHMM"],
+            ["string", "Ending time for enable AC supply the load", "HHMM"]
+        ],
+        "test_responses": [
+            b"",
+        ],
+    },
+
     # SETTER ###
     #    "LON": {
     #        "name": "LON",
